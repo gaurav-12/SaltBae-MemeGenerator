@@ -1,0 +1,62 @@
+body {
+    background-color: black;
+    color: whitesmoke;
+}
+
+html, body {
+    margin: 0;
+}
+
+#downloadLink {
+    text-decoration: none;
+    border: 2px solid white;
+    color: white;
+    padding: 10px;
+    display: inline-block;
+    margin: 10px
+}
+
+label {
+    display: block;
+    color: lightgray;
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+#container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#canvas {
+    border: 2px solid white;   
+}
+
+#container section {
+    margin: 20px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#memeimage {
+    display: none;
+}
+
+#saltOptions {
+    margin: 0;
+    padding: 0;
+}
+
+#saltOptions img {
+    width: 30px;
+    height: 30px;
+}
+
+#saltOptions li {
+    display: inline-block;
+    border: 2px solid white;
+    cursor: pointer;
+}

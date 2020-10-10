@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Salt-Bae Meme Generator</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="script.js"></script>
+</head>
+
+<body>
+    <div id="container">
+        <section>
+            <canvas id="canvas" width="500" height="500">
+                Canvas requires a browser that supports HTML5.
+            </canvas>
+            <img id="memeimage" crossorigin="anonymous"
+                src="http://res.cloudinary.com/dlwnmz6lr/image/upload/v1520011253/170203-salt-bae-mn-1530_060e5898cdcf7b58f97126d3cfbfdf71.nbcnews-ux-2880-1000_kllh1d.jpg" />
+        </section>
+
+        <section>
+            <label for="upload-img">Select image for Salt</label>
+            <input type="file" id="upload-img" accept="image/jpeg,image/png,image/gif" />
+
+            <br>
+            
+            <label>Or choose from here:</label>
+            <ul id="saltOptions">
+                <li><img src="./public/images/finger.png" alt="F**k off" /></li>
+                <li><img src="./public/images/flower.png" alt="Respect" /></li>
+                <li><img src="./public/images/fire.png" alt="Lit" /></li>
+                <li><img src="./public/images/heart.png" alt="Awww" /></li>
+                <li><img src="./public/images/ligntning.png" alt="Thunderrr" /></li>
+                <li><img src="./public/images/poop.png" alt="Shite" />
+                </li>
+            </ul>
+
+            <a href="#" id="downloadLink" download="salt-bae.jpeg">Download!</a>
+        </section>
+    </div>
+</body>
+
+</html>
