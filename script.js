@@ -1,16 +1,20 @@
+const BOTTOM_PADDING = 120;
+const TEXT_PADDING = 15;
+
 function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
 
-function drawBackgroundImage(canvas, ctx) {
+function drawBackgroundImage(canvas, ctx, textCanvas) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.drawImage(document.getElementById('memeimage'), 0, 0, canvas.width, canvas.height - 100);
+    ctx.drawImage(document.getElementById('memeimage'), 0, 0, canvas.width, canvas.height - BOTTOM_PADDING);
+    ctx.drawImage(textCanvas, TEXT_PADDING, canvas.height - (BOTTOM_PADDING - TEXT_PADDING));
 
     ctx.strokeStyle = 'white';
     ctx.lineWidth = 4;
@@ -37,7 +41,7 @@ function drawSalt(src, canvas, ctx) {
     image.onload = function () {
         for (let i = 0; i < 10; i++) {
             const randomX = getRandomInt(10, canvas.width / 2);
-            const randomY = getRandomInt(canvas.height - 400, canvas.height - 120);
+            const randomY = getRandomInt(canvas.height - (BOTTOM_PADDING + 20) - 280, canvas.height - (BOTTOM_PADDING + 30));
             const dimensions = getRandomImageSize(25, 75, image.width, image.height);
 
             newCanvas.height = dimensions.height + 5;
@@ -62,13 +66,25 @@ onload = function () {
     const canvas = document.getElementById('canvas');
     canvas.height = window.innerHeight - 20; // 20 is the margin given to section in css
     const ctx = canvas.getContext('2d');
-    drawBackgroundImage(canvas, ctx);
+
+    const bottomText = document.getElementById('bottomText');
+
+    const textCanvas = document.createElement('canvas');
+    textCanvas.height = BOTTOM_PADDING;
+    textCanvas.width = canvas.width
+    const textCtx = textCanvas.getContext('2d');
+    textCtx.font = "bold 25px Arial";
+    textCtx.fillStyle = "black";
+    textCtx.textBaseline = "top";
+    textCtx.fillText(bottomText.value, 0, 0);
+
+    drawBackgroundImage(canvas, ctx, textCanvas);
 
     const saltImage = drawSalt('https://image.flaticon.com/icons/png/512/2746/2746582.png', canvas, ctx);
 
     const input = document.querySelector("input[type='file']")
     input.addEventListener('change', function () {
-        drawBackgroundImage(canvas, ctx);
+        drawBackgroundImage(canvas, ctx, textCanvas);
         updateSalt(this.files[0], saltImage);
     });
 
@@ -80,7 +96,18 @@ onload = function () {
 
     const saltOptions = document.getElementById('saltOptions');
     saltOptions.addEventListener('click', (e) => {
-        drawBackgroundImage(canvas, ctx);
+        drawBackgroundImage(canvas, ctx, textCanvas);
         saltImage.src = e.target.src
     })
+
+    bottomText.addEventListener('keyup', (e) => {
+        textCtx.clearRect(0, 0, textCanvas.width, textCanvas.height);
+
+        ctx.clearRect(TEXT_PADDING, canvas.height - (BOTTOM_PADDING - TEXT_PADDING), textCanvas.width, textCanvas.height);
+        ctx.fillRect(TEXT_PADDING, canvas.height - (BOTTOM_PADDING - TEXT_PADDING), textCanvas.width, textCanvas.height);
+
+        textCtx.fillText(e.target.value, 0, 0);
+        ctx.drawImage(textCanvas, TEXT_PADDING, canvas.height - (BOTTOM_PADDING - TEXT_PADDING));
+        console.log(e.target.value);
+    });
 };

@@ -45,7 +45,21 @@ label {
 }
 
 #upload-container {
-    margin-bottom: 50px;
+    margin-bottom: 30px;
+}
+
+#bottomTextContainer {
+    margin-top: 50px;
+}
+
+#bottomTextContainer input {
+    border: 2px solid white;
+    color: white;
+    padding: 10px;
+    background: black;
+    outline: none;
+    margin-top: 10px;
+    font-size: 18px;
 }
 
 #container {
