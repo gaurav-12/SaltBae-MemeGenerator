@@ -1,5 +1,6 @@
 const BOTTOM_PADDING = 120;
 const TEXT_PADDING = 15;
+const LINE_HEIGHT = 25;
 
 function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -39,10 +40,10 @@ function drawSalt(src, canvas, ctx) {
 
     // After the image has loaded, draw it to the canvas
     image.onload = function () {
-        for (let i = 0; i < 10; i++) {
-            const randomX = getRandomInt(10, canvas.width / 2);
-            const randomY = getRandomInt(canvas.height - (BOTTOM_PADDING + 20) - 280, canvas.height - (BOTTOM_PADDING + 30));
-            const dimensions = getRandomImageSize(25, 75, image.width, image.height);
+        for (let i = 0; i < 8; i++) {
+            const randomX = getRandomInt(10, (canvas.width / 2) - 38);
+            const randomY = getRandomInt(canvas.height - BOTTOM_PADDING - 200, canvas.height - (BOTTOM_PADDING + TEXT_PADDING + 38));
+            const dimensions = getRandomImageSize(25, 70, image.width, image.height);
 
             newCanvas.height = dimensions.height + 5;
             newCanvas.width = dimensions.width + 5;
@@ -64,15 +65,20 @@ updateSalt = (file, saltImage) => {
 
 onload = function () {
     const canvas = document.getElementById('canvas');
-    canvas.height = window.innerHeight - 20; // 20 is the margin given to section in css
+    canvas.height = window.innerHeight - 20; // 20 is the margin given to '<section>' in css
     const ctx = canvas.getContext('2d');
 
     const bottomText = document.getElementById('bottomText');
 
     const textCanvas = document.createElement('canvas');
-    textCanvas.height = BOTTOM_PADDING;
-    textCanvas.width = canvas.width
+    textCanvas.height = BOTTOM_PADDING - (2 * TEXT_PADDING - 10);
+    textCanvas.width = canvas.width - (2 * TEXT_PADDING);
+
     const textCtx = textCanvas.getContext('2d');
+
+    textCtx.strokeStyle = "gray";
+    textCtx.lineWidth = "2px";
+
     textCtx.font = "bold 25px Arial";
     textCtx.fillStyle = "black";
     textCtx.textBaseline = "top";
@@ -106,8 +112,15 @@ onload = function () {
         ctx.clearRect(TEXT_PADDING, canvas.height - (BOTTOM_PADDING - TEXT_PADDING), textCanvas.width, textCanvas.height);
         ctx.fillRect(TEXT_PADDING, canvas.height - (BOTTOM_PADDING - TEXT_PADDING), textCanvas.width, textCanvas.height);
 
-        textCtx.fillText(e.target.value, 0, 0);
-        ctx.drawImage(textCanvas, TEXT_PADDING, canvas.height - (BOTTOM_PADDING - TEXT_PADDING));
-        console.log(e.target.value);
+        const text = e.target.value.split('\n');
+
+        let y = -1 * LINE_HEIGHT;
+        text.forEach((line, index) => {
+            textCtx.fillText(line, 0, y + LINE_HEIGHT);
+            y += LINE_HEIGHT;
+        });
+
+        
+        ctx.drawImage(textCanvas, TEXT_PADDING, canvas.height - (BOTTOM_PADDING - TEXT_PADDING)); 
     });
 };
