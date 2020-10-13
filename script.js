@@ -40,9 +40,9 @@ function drawSalt(src, canvas, ctx) {
 
     // After the image has loaded, draw it to the canvas
     image.onload = function () {
-        for (let i = 0; i < 8; i++) {
+        for (let i = 0; i < 12; i++) {
             const randomX = getRandomInt(10, (canvas.width / 2) - 38);
-            const randomY = getRandomInt(canvas.height - BOTTOM_PADDING - 200, canvas.height - (BOTTOM_PADDING + TEXT_PADDING + 38));
+            const randomY = getRandomInt(canvas.height - BOTTOM_PADDING - 300, canvas.height - (BOTTOM_PADDING + TEXT_PADDING + 38));
             const dimensions = getRandomImageSize(25, 70, image.width, image.height);
 
             newCanvas.height = dimensions.height + 5;
@@ -65,7 +65,8 @@ updateSalt = (file, saltImage) => {
 
 onload = function () {
     const canvas = document.getElementById('canvas');
-    canvas.height = window.innerHeight - 20; // 20 is the margin given to '<section>' in css
+    canvas.height = 700; // 20 is the margin given to '<section>' in css
+    canvas.width = 600;
     const ctx = canvas.getContext('2d');
 
     const bottomText = document.getElementById('bottomText');

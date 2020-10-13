@@ -4,8 +4,17 @@
 
 <head>
     <title>Salt-Bae Meme Generator</title>
+    <link rel="manifest" href="manifest.json" crossorigin="anonymous" />
+    <link rel="icon" type="image/x-icon" href="public/icons/favicon.ico">
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker
+                .register('/service-worker.js')
+                .then(function () { console.log("Service Worker Registered"); });
+        }
+    </script>
 </head>
 
 <body>
@@ -30,7 +39,7 @@
                 <li><img src="./public/images/flower.png" alt="Respect" /></li>
                 <li><img src="./public/images/fire.png" alt="Lit" /></li>
                 <li><img src="./public/images/heart.png" alt="Awww" /></li>
-                <li><img src="./public/images/ligntning.png" alt="Thunderrr" /></li>
+                <li><img src="./public/images/lightning.png" alt="Thunderrr" /></li>
                 <li><img src="./public/images/poop.png" alt="Shite" />
                 </li>
             </ul>
