@@ -33,6 +33,10 @@ http.createServer((req, res) => {
                 contentType = 'application/javascript'; // or text/javascript or application/x-javascript
                 break;
 
+            case '/watermarker.html':
+                file = 'watermarker.html'
+                break;
+
             default:
                 file = 'index.html'
                 break;
