@@ -19,8 +19,8 @@ http.createServer((req, res) => {
                 contentType = 'text/css';
                 break;
 
-            case '/script.js':
-                file = 'script.js'
+            case '/script.js' : case '/watermarkerScript.js':
+                file = req.url.substring(1);
                 contentType = 'text/javascript';
                 break;
 

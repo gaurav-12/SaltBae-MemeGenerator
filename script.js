@@ -113,7 +113,7 @@ onload = function () {
         ctx.clearRect(TEXT_PADDING, canvas.height - (BOTTOM_PADDING - TEXT_PADDING), textCanvas.width, textCanvas.height);
         ctx.fillRect(TEXT_PADDING, canvas.height - (BOTTOM_PADDING - TEXT_PADDING), textCanvas.width, textCanvas.height);
 
-        const text = e.target.value.split('\n');
+        const text = e.target.value.trim().split('\n');
 
         let y = -1 * LINE_HEIGHT;
         text.forEach((line, index) => {
