@@ -37,21 +37,27 @@
         </section>
 
         <section>
-            <div id="upload-container">
-                <label for="upload-img">Select Image for Salt</label>
-                <input type="file" id="upload-img" accept="image/jpeg,image/png,image/gif" />
+            <div id="saltTypeChoice">
+                <button class="active">Select from Default</button>
+                <button>Upload Image</button>
             </div>
 
-            <label>Or choose from here:</label>
-            <ul id="saltOptions">
-                <li><img src="./public/images/finger.png" alt="F**k off" /></li>
-                <li><img src="./public/images/flower.png" alt="Respect" /></li>
-                <li><img src="./public/images/fire.png" alt="Lit" /></li>
-                <li><img src="./public/images/heart.png" alt="Awww" /></li>
-                <li><img src="./public/images/lightning.png" alt="Thunderrr" /></li>
-                <li><img src="./public/images/poop.png" alt="Shite" />
-                </li>
-            </ul>
+            <div id="saltOptionsContainer">
+                <ul id="saltOptions">
+                    <li><img src="./public/images/flower.png" alt="Respect" /></li>
+                    <li><img src="./public/images/finger.png" alt="F**k off" /></li>
+                    <li><img src="./public/images/fire.png" alt="Lit" /></li>
+                    <li><img src="./public/images/heart.png" alt="Awww" /></li>
+                    <li><img src="./public/images/lightning.png" alt="Thunderrr" /></li>
+                    <li><img src="./public/images/poop.png" alt="Shite" />
+                    </li>
+                </ul>
+            </div>
+
+            <div id="upload-container" style="display: none;">
+                <label for="upload-img">Select Image for Salt</label>
+                <input type="file" hidden id="upload-img" accept="image/jpeg,image/png,image/gif" />
+            </div>
 
             <div id="bottomTextContainer">
                 <label>Enter bottom text:</label>

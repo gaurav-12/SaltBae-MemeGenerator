@@ -59,14 +59,30 @@ function drawSalt(src, canvas, ctx) {
     return image;
 }
 
-updateSalt = (file, saltImage) => {
+const updateSalt = (file, saltImage) => {
     saltImage.src = URL.createObjectURL(file);
+}
+
+const toggleChoice = (choice, thisChoice, otherChoice) => {
+    if (choice == "optionsSelect") {
+        document.getElementById('upload-container').style.display = "none";
+        document.getElementById('saltOptionsContainer').style.display = "block";
+    }
+
+    else {
+        document.getElementById('upload-container').style.display = "flex";
+        document.getElementById('saltOptionsContainer').style.display = "none";
+    }
+
+    selectedChoice = choice;
+    thisChoice.className = "active";
+    otherChoice.className = null;
 }
 
 onload = function () {
     const canvas = document.getElementById('canvas');
     canvas.height = 700; // 20 is the margin given to '<section>' in css
-    canvas.width = 600;
+    canvas.width = 550;
     const ctx = canvas.getContext('2d');
 
     const bottomText = document.getElementById('bottomText');
@@ -87,7 +103,12 @@ onload = function () {
 
     drawBackgroundImage(canvas, ctx, textCanvas);
 
-    const saltImage = drawSalt('https://image.flaticon.com/icons/png/512/2746/2746582.png', canvas, ctx);
+    const saltOptions = document.getElementById('saltOptions');
+    const saltImage = drawSalt(saltOptions.children.item(0).children.item(0).src, canvas, ctx);
+    saltOptions.addEventListener('click', (e) => {
+        drawBackgroundImage(canvas, ctx, textCanvas);
+        saltImage.src = e.target.src
+    })
 
     const input = document.querySelector("input[type='file']")
     input.addEventListener('change', function () {
@@ -100,12 +121,6 @@ onload = function () {
         a.download = 'salt-bae-' + Date.now()
         a.href = canvas.toDataURL('image/jpeg');
     }, false)
-
-    const saltOptions = document.getElementById('saltOptions');
-    saltOptions.addEventListener('click', (e) => {
-        drawBackgroundImage(canvas, ctx, textCanvas);
-        saltImage.src = e.target.src
-    })
 
     bottomText.addEventListener('keyup', (e) => {
         textCtx.clearRect(0, 0, textCanvas.width, textCanvas.height);
@@ -121,7 +136,23 @@ onload = function () {
             y += LINE_HEIGHT;
         });
 
-        
-        ctx.drawImage(textCanvas, TEXT_PADDING, canvas.height - (BOTTOM_PADDING - TEXT_PADDING)); 
+
+        ctx.drawImage(textCanvas, TEXT_PADDING, canvas.height - (BOTTOM_PADDING - TEXT_PADDING));
+    });
+
+    const choiceDiv = document.querySelector("#saltTypeChoice");
+
+    // Image select choice
+    choiceDiv.children[0].addEventListener("click", (e) => {
+        toggleChoice("optionsSelect", e.target, choiceDiv.children[1]);
+        drawBackgroundImage(canvas, ctx, textCanvas);
+        saltImage.src = saltOptions.children.item(0).children.item(0).src;
+    });
+
+    // Options select choice
+    choiceDiv.children[1].addEventListener("click", (e) => {
+        toggleChoice("imageSelect", e.target, choiceDiv.children[0]);
+        drawBackgroundImage(canvas, ctx, textCanvas);
+        saltImage.src = '/public/images/brofist.png'
     });
 };

@@ -48,6 +48,21 @@ nav ul li:hover {
     opacity: 1;
 }
 
+button {
+    border: 2px solid white;
+    background-color: transparent;
+    color: white;
+    padding: 10px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+button:focus {
+    outline: none;
+}
+
 .active {
     opacity: 1;
 }
@@ -86,16 +101,10 @@ label {
     font-style: italic;
 }
 
-#upload-container input[type="file"] {
-    display: none;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    cursor: pointer;
-    outline: none;
-    border: none;
+#upload-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
 }
 
 #upload-container label {
@@ -106,10 +115,6 @@ label {
     cursor: pointer;
 }
 
-#upload-container {
-    margin-bottom: 30px;
-}
-
 #bottomTextContainer {
     margin-top: 50px;
 }
@@ -117,7 +122,6 @@ label {
 #editOptionsContainer {
     margin-top: 50px;
     border: 2px solid white;
-    max-width: fit-content;
     padding: 10px;
 }
 
