@@ -36,7 +36,7 @@
 
         <section>
             <div id="watermarkChoice">
-                <button class="active" >Text Watermark</button>
+                <button class="active">Text Watermark</button>
                 <button>Image Watermark</button>
             </div>
 
@@ -53,8 +53,10 @@
                 <label>Change Opacity</label>
                 <input type="range" max="1" min="0" step="0.1" value="0.8" id="opacitySlider" />
 
-                <label>Change Color</label>
-                <input type="color" value="#000000" id="colorPicker" />
+                <div id="colorPickerDiv">
+                    <label>Change Color</label>
+                    <input type="color" value="#000000" id="colorPicker" />
+                </div>
             </div>
 
             <a href="#" id="downloadLink" download="watermarked.jpeg">Download!</a>

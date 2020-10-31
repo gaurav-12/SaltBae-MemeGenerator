@@ -1,4 +1,6 @@
 const drawBackgroundImage = (canvas, ctx, watermarkCanvas) => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -24,7 +26,7 @@ const toggleChoice = (choice, thisChoice, otherChoice) => {
         document.getElementById('upload-container').style.display = "flex";
         document.getElementById('markerTextContainer').style.display = "none";
     }
-    
+
     selectedChoice = choice;
     thisChoice.className = "active";
     otherChoice.className = null;
@@ -38,8 +40,9 @@ onload = function () {
     const ctx = canvas.getContext('2d');
 
     const watermarkText = document.getElementById('watermarkText');
-    opSlider = document.getElementById('opacitySlider');
-    colorPicker = document.getElementById('colorPicker');
+    const opSlider = document.getElementById('opacitySlider');
+    const colorPicker = document.getElementById('colorPicker');
+    const colorPickerDiv = document.getElementById('colorPickerDiv');
 
     const watermarkCanvas = document.createElement('canvas');
     watermarkCanvas.height = canvas.height;
@@ -51,8 +54,7 @@ onload = function () {
     watermarkCtx.font = "bold " + textSize + "px Arial";
     watermarkCtx.fillStyle = colorPicker.value;
     watermarkCtx.textBaseline = "top";
-    watermarkCtx.textAlign = "center"
-    watermarkCtx.fillText(watermarkText.value, canvas.width / 2, canvas.height / 2);
+    watermarkCtx.fillText(watermarkText.value, 0, 0);
 
     drawBackgroundImage(canvas, ctx, watermarkCanvas);
 
@@ -64,7 +66,7 @@ onload = function () {
 
     watermarkText.addEventListener('keyup', (e) => {
         watermarkCtx.clearRect(0, 0, watermarkCanvas.width, watermarkCanvas.height);
-        watermarkCtx.fillText(e.target.value.trim(), canvas.width / 2, canvas.height / 2);
+        watermarkCtx.fillText(e.target.value.trim(), 0, 0);
 
         drawBackgroundImage(canvas, ctx, watermarkCanvas);
     });
@@ -74,9 +76,9 @@ onload = function () {
         watermarkCtx.globalAlpha = e.target.value;
 
         if (selectedChoice == "text")
-            watermarkCtx.fillText(watermarkText.value, canvas.width / 2, canvas.height / 2);
+            watermarkCtx.fillText(watermarkText.value, 0, 0);
         else
-            watermarkCtx.drawImage(watermarkImage, canvas.width / 2, canvas.height / 2);
+            watermarkCtx.drawImage(watermarkImage, 0, 0, watermarkImage.width * 0.25, watermarkImage.height * 0.25);
 
         drawBackgroundImage(canvas, ctx, watermarkCanvas);
     });
@@ -84,28 +86,31 @@ onload = function () {
     colorPicker.addEventListener('input', (e) => {
         watermarkCtx.clearRect(0, 0, watermarkCanvas.width, watermarkCanvas.height);
         watermarkCtx.fillStyle = e.target.value;
-        watermarkCtx.fillText(watermarkText.value, canvas.width / 2, canvas.height / 2);
+        watermarkCtx.fillText(watermarkText.value, 0, 0);
 
         drawBackgroundImage(canvas, ctx, watermarkCanvas);
     });
 
     const input = document.querySelector("input[type='file']")
     input.addEventListener('change', function () {
-        watermarkCtx.clearRect(0, 0, watermarkCanvas.width, watermarkCanvas.height);
         watermarkImage.src = URL.createObjectURL(this.files[0]);
-        watermarkCtx.drawImage(watermarkImage, canvas.width / 2, canvas.height / 2);
+
+        watermarkCtx.clearRect(0, 0, watermarkCanvas.width, watermarkCanvas.height);
+        watermarkCtx.drawImage(watermarkImage, 0, 0, watermarkImage.width * 0.25, watermarkImage.height * 0.25);
 
         drawBackgroundImage(canvas, ctx, watermarkCanvas);
     });
 
     const choiceDiv = document.querySelector("#watermarkChoice");
-    
+
     // Text choice
     choiceDiv.children[0].addEventListener("click", (e) => {
         toggleChoice("text", e.target, choiceDiv.children[1]);
 
+        colorPickerDiv.style.display = "block";
+
         watermarkCtx.clearRect(0, 0, watermarkCanvas.width, watermarkCanvas.height);
-        watermarkCtx.fillText(watermarkText.value.trim(), canvas.width / 2, canvas.height / 2);
+        watermarkCtx.fillText(watermarkText.value.trim(), 0, 0);
         drawBackgroundImage(canvas, ctx, watermarkCanvas);
     });
 
@@ -113,10 +118,10 @@ onload = function () {
     choiceDiv.children[1].addEventListener("click", (e) => {
         toggleChoice("image", e.target, choiceDiv.children[0]);
 
+        colorPickerDiv.style.display = "none";
+
         watermarkCtx.clearRect(0, 0, watermarkCanvas.width, watermarkCanvas.height);
-        watermarkCanvas.height = watermarkImage.height * 0.25;
-        watermarkCanvas.width = watermarkImage.width * 0.25;
-        watermarkCtx.drawImage(watermarkImage, 0, 0);
+        watermarkCtx.drawImage(watermarkImage, 0, 0, watermarkImage.width * 0.25, watermarkImage.height * 0.25);
         drawBackgroundImage(canvas, ctx, watermarkCanvas);
     });
 }

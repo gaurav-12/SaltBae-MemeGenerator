@@ -125,7 +125,7 @@ label {
     padding: 10px;
 }
 
-#editOptionsContainer label:not(:first-child) {
+#editOptionsContainer #colorPickerDiv {
     margin-top: 20px;
 }
 

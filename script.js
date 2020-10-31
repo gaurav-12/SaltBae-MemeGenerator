@@ -2,13 +2,13 @@ const BOTTOM_PADDING = 120;
 const TEXT_PADDING = 15;
 const LINE_HEIGHT = 25;
 
-function getRandomInt(min, max) {
+const getRandomInt = (min, max) => {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
 
-function drawBackgroundImage(canvas, ctx, textCanvas) {
+const drawBackgroundImage = (canvas, ctx, textCanvas) => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     ctx.fillStyle = 'white';
@@ -22,14 +22,14 @@ function drawBackgroundImage(canvas, ctx, textCanvas) {
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
 }
 
-function getRandomImageSize(min, max, width, height) {
+const getRandomImageSize = (min, max, width, height) => {
     const ratio = width / height;  // Used for aspect ratio
     width = getRandomInt(min, max);
     height = width / ratio;
     return { width, height };
 }
 
-function drawSalt(src, canvas, ctx) {
+const drawSalt = (src, canvas, ctx) => {
     // Create an image object. (Not part of the dom)
     const image = new Image();
     image.src = src;
@@ -74,7 +74,6 @@ const toggleChoice = (choice, thisChoice, otherChoice) => {
         document.getElementById('saltOptionsContainer').style.display = "none";
     }
 
-    selectedChoice = choice;
     thisChoice.className = "active";
     otherChoice.className = null;
 }
