@@ -1,6 +1,6 @@
 const drawBackgroundImage = (canvas, ctx, watermarkCanvas) => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -13,9 +13,6 @@ const drawBackgroundImage = (canvas, ctx, watermarkCanvas) => {
 }
 
 let selectedChoice = "text";
-const watermarkImage = new Image();
-watermarkImage.src = "/public/images/brofist.png";
-
 const toggleChoice = (choice, thisChoice, otherChoice) => {
     if (choice == "text") {
         document.getElementById('upload-container').style.display = "none";
@@ -32,7 +29,7 @@ const toggleChoice = (choice, thisChoice, otherChoice) => {
     otherChoice.className = null;
 }
 
-const textSize = 30;
+const TEXT_SIZE = 30;
 onload = function () {
     const canvas = document.getElementById('canvas');
     canvas.height = 700;
@@ -43,6 +40,8 @@ onload = function () {
     const opSlider = document.getElementById('opacitySlider');
     const colorPicker = document.getElementById('colorPicker');
     const colorPickerDiv = document.getElementById('colorPickerDiv');
+    const watermarkImage = new Image();
+    watermarkImage.src = "/public/images/brofist.png";
 
     const watermarkCanvas = document.createElement('canvas');
     watermarkCanvas.height = canvas.height;
@@ -51,7 +50,7 @@ onload = function () {
     const watermarkCtx = watermarkCanvas.getContext('2d');
     watermarkCtx.globalAlpha = opSlider.value;
 
-    watermarkCtx.font = "bold " + textSize + "px Arial";
+    watermarkCtx.font = "bold " + TEXT_SIZE + "px Arial";
     watermarkCtx.fillStyle = colorPicker.value;
     watermarkCtx.textBaseline = "top";
     watermarkCtx.fillText(watermarkText.value, 0, 0);
@@ -95,10 +94,11 @@ onload = function () {
     input.addEventListener('change', function () {
         watermarkImage.src = URL.createObjectURL(this.files[0]);
 
-        watermarkCtx.clearRect(0, 0, watermarkCanvas.width, watermarkCanvas.height);
-        watermarkCtx.drawImage(watermarkImage, 0, 0, watermarkImage.width * 0.25, watermarkImage.height * 0.25);
-
-        drawBackgroundImage(canvas, ctx, watermarkCanvas);
+        watermarkImage.onload = () => {
+            watermarkCtx.clearRect(0, 0, watermarkCanvas.width, watermarkCanvas.height);
+            watermarkCtx.drawImage(watermarkImage, 0, 0, watermarkImage.width * 0.25, watermarkImage.height * 0.25);
+            drawBackgroundImage(canvas, ctx, watermarkCanvas);
+        }
     });
 
     const choiceDiv = document.querySelector("#watermarkChoice");
