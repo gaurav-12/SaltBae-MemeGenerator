@@ -76,6 +76,7 @@ button:focus {
 #container section {
     margin: 20px;
     align-items: center;
+    justify-content: center;
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -83,6 +84,20 @@ button:focus {
 
 #memeimage, #bgimage {
     display: none;
+}
+
+#movingHandles {
+    width: 50px;
+    height: 50px;
+    border: 2px dashed white;
+    position: absolute;
+    background-color: transparent;
+    cursor: move;
+    opacity: 0;
+}
+
+#movingHandles:hover {
+    opacity: 1;
 }
 
 #downloadLink {

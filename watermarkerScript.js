@@ -29,6 +29,9 @@ const toggleChoice = (choice, thisChoice, otherChoice) => {
     otherChoice.className = null;
 }
 
+const getImgWidth = (img) => img.width * 0.25;
+const getImgHeight = (img) => img.height * 0.25;
+
 const TEXT_SIZE = 30;
 onload = function () {
     const canvas = document.getElementById('canvas');
@@ -36,10 +39,15 @@ onload = function () {
     canvas.width = 450;
     const ctx = canvas.getContext('2d');
 
+    let divDraggable = false;
+    let divX = 0, divY = 0;
+    let watermarkX = canvas.width / 2, watermarkY = canvas.height / 2;
+
     const watermarkText = document.getElementById('watermarkText');
     const opSlider = document.getElementById('opacitySlider');
     const colorPicker = document.getElementById('colorPicker');
     const colorPickerDiv = document.getElementById('colorPickerDiv');
+    const draggableDiv = document.getElementById("movingHandles");
     const watermarkImage = new Image();
     watermarkImage.src = "/public/images/brofist.png";
 
@@ -52,8 +60,9 @@ onload = function () {
 
     watermarkCtx.font = "bold " + TEXT_SIZE + "px Arial";
     watermarkCtx.fillStyle = colorPicker.value;
-    watermarkCtx.textBaseline = "top";
-    watermarkCtx.fillText(watermarkText.value, 0, 0);
+    watermarkCtx.textBaseline = "middle";
+    watermarkCtx.textAlign = "center";
+    watermarkCtx.fillText(watermarkText.value.trim(), watermarkX, watermarkY);
 
     drawBackgroundImage(canvas, ctx, watermarkCanvas);
 
@@ -65,7 +74,7 @@ onload = function () {
 
     watermarkText.addEventListener('keyup', (e) => {
         watermarkCtx.clearRect(0, 0, watermarkCanvas.width, watermarkCanvas.height);
-        watermarkCtx.fillText(e.target.value.trim(), 0, 0);
+        watermarkCtx.fillText(e.target.value.trim(), watermarkX, watermarkY);
 
         drawBackgroundImage(canvas, ctx, watermarkCanvas);
     });
@@ -75,9 +84,9 @@ onload = function () {
         watermarkCtx.globalAlpha = e.target.value;
 
         if (selectedChoice == "text")
-            watermarkCtx.fillText(watermarkText.value, 0, 0);
+            watermarkCtx.fillText(watermarkText.value.trim(), watermarkX, watermarkY);
         else
-            watermarkCtx.drawImage(watermarkImage, 0, 0, watermarkImage.width * 0.25, watermarkImage.height * 0.25);
+            watermarkCtx.drawImage(watermarkImage, watermarkX - (getImgWidth(watermarkImage)/2), watermarkY - (getImgHeight(watermarkImage)/2), getImgWidth(watermarkImage), getImgHeight(watermarkImage));
 
         drawBackgroundImage(canvas, ctx, watermarkCanvas);
     });
@@ -85,7 +94,7 @@ onload = function () {
     colorPicker.addEventListener('input', (e) => {
         watermarkCtx.clearRect(0, 0, watermarkCanvas.width, watermarkCanvas.height);
         watermarkCtx.fillStyle = e.target.value;
-        watermarkCtx.fillText(watermarkText.value, 0, 0);
+        watermarkCtx.fillText(watermarkText.value.trim(), watermarkX, watermarkY);
 
         drawBackgroundImage(canvas, ctx, watermarkCanvas);
     });
@@ -96,7 +105,7 @@ onload = function () {
 
         watermarkImage.onload = () => {
             watermarkCtx.clearRect(0, 0, watermarkCanvas.width, watermarkCanvas.height);
-            watermarkCtx.drawImage(watermarkImage, 0, 0, watermarkImage.width * 0.25, watermarkImage.height * 0.25);
+            watermarkCtx.drawImage(watermarkImage, watermarkX - (getImgWidth(watermarkImage)/2), watermarkY - (getImgHeight(watermarkImage)/2), getImgWidth(watermarkImage), getImgHeight(watermarkImage));
             drawBackgroundImage(canvas, ctx, watermarkCanvas);
         }
     });
@@ -110,7 +119,7 @@ onload = function () {
         colorPickerDiv.style.display = "block";
 
         watermarkCtx.clearRect(0, 0, watermarkCanvas.width, watermarkCanvas.height);
-        watermarkCtx.fillText(watermarkText.value.trim(), 0, 0);
+        watermarkCtx.fillText(watermarkText.value.trim(), watermarkX, watermarkY);
         drawBackgroundImage(canvas, ctx, watermarkCanvas);
     });
 
@@ -121,7 +130,45 @@ onload = function () {
         colorPickerDiv.style.display = "none";
 
         watermarkCtx.clearRect(0, 0, watermarkCanvas.width, watermarkCanvas.height);
-        watermarkCtx.drawImage(watermarkImage, 0, 0, watermarkImage.width * 0.25, watermarkImage.height * 0.25);
+        watermarkCtx.drawImage(watermarkImage, watermarkX - (getImgWidth(watermarkImage)/2), watermarkY - (getImgHeight(watermarkImage)/2), getImgWidth(watermarkImage), getImgHeight(watermarkImage));
         drawBackgroundImage(canvas, ctx, watermarkCanvas);
+    });
+
+    // Draggable handles
+    draggableDiv.addEventListener("mousedown", (e) => {
+        divDraggable = true;
+    });
+    draggableDiv.addEventListener("mouseout", (e) => {
+        divDraggable = false;
+    });
+    draggableDiv.addEventListener("mouseup", (e) => {
+        divDraggable = false;
+    });
+    draggableDiv.addEventListener("mousemove", (e) => {
+        const canvasBB = canvas.getBoundingClientRect();
+        const divBB = e.target.getBoundingClientRect();
+        if (divDraggable) {
+            divX += e.movementX;
+            if ((divX + divBB.width / 2) > canvasBB.width / 2)
+                divX -= (divX + divBB.width / 2) - (canvas.width / 2);
+            else if ((divX - divBB.width / 2) < 0 && (divX - divBB.width / 2) < (-1 * (canvas.width / 2)))
+                divX -= (divX - divBB.width / 2) + (canvas.width / 2);
+
+            divY += e.movementY;
+            if ((divY + divBB.height / 2) > canvasBB.height / 2)
+                divY -= (divY + divBB.height / 2) - (canvas.height / 2);
+            else if ((divY - divBB.height / 2) < 0 && (divY - divBB.height / 2) < (-1 * (canvas.height / 2)))
+                divY -= (divY - divBB.height / 2) + (canvas.height / 2);
+
+            e.target.style.transform = `translate(${divX}px, ${divY}px)`;
+            watermarkCtx.clearRect(0, 0, canvas.width, canvas.height);
+            watermarkX = canvas.width / 2 + divX, watermarkY = canvas.height / 2 + divY
+            if (selectedChoice == "text")
+                watermarkCtx.fillText(watermarkText.value.trim(), watermarkX, watermarkY);
+            else
+                watermarkCtx.drawImage(watermarkImage, watermarkX - (getImgWidth(watermarkImage)/2), watermarkY - (getImgHeight(watermarkImage)/2), getImgWidth(watermarkImage), getImgHeight(watermarkImage));
+
+            drawBackgroundImage(canvas, ctx, watermarkCanvas)
+        }
     });
 }
